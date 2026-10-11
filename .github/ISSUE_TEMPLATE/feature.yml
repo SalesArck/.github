@@ -1,0 +1,45 @@
+name: Change
+description: A capability or documentation change.
+title: "feat: "
+labels:
+  - enhancement
+body:
+  - type: dropdown
+    id: repo
+    attributes:
+      label: Repository
+      options:
+        - salesarck-monorepo
+        - salesarck-documentation
+        - salesarck-website
+        - salesarck-rewards
+        - .github
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - area: api
+        - area: web
+        - area: website
+        - area: docs
+        - area: pos
+        - area: wallet
+        - area: auth
+        - area: infra
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why this exists
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Done when
+    validations:
+      required: true

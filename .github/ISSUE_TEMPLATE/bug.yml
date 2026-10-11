@@ -1,0 +1,50 @@
+name: Bug
+description: Something in a SalesArck surface is broken.
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - Product (loyalty.salesarck.com)
+        - API
+        - Marketing site
+        - Documentation
+        - Rewards (separate platform)
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - area: api
+        - area: web
+        - area: website
+        - area: docs
+        - area: pos
+        - area: wallet
+        - area: auth
+        - area: infra
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what you saw. Include the tenant only if it is your own test merchant.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true

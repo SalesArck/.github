@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://salesarck-documentation.pages.dev
+    about: Product behavior, architecture, and implementation docs.
+  - name: Status
+    url: https://github.com/SalesArck/.github/blob/main/STATUS.md
+    about: Whether the public sites and APIs are responding.
+  - name: Security
+    url: https://github.com/SalesArck/.github/blob/main/SECURITY.md
+    about: Report a vulnerability by email. Do not open an issue for secrets or tenant data.

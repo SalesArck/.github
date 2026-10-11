@@ -1,0 +1,54 @@
+name: Sync labels
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - labels.yml
+      - .github/workflows/sync-labels.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sync:
+    name: Apply labels.yml
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Apply the catalog to this repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          python3 << 'PY'
+          import os, subprocess
+          labels = []
+          current = None
+          for line in open("labels.yml"):
+              if line.startswith("- name:"):
+                  if current:
+                      labels.append(current)
+                  current = {"name": line.split(":", 1)[1].strip().strip('"')}
+              elif current and line.strip().startswith("color:"):
+                  current["color"] = line.split(":", 1)[1].strip().strip('"')
+              elif current and line.strip().startswith("description:"):
+                  current["description"] = line.split(":", 1)[1].strip().strip('"')
+          if current:
+              labels.append(current)
+          repo = os.environ["REPO"]
+          for label in labels:
+              subprocess.run(
+                  [
+                      "gh", "label", "create", label["name"],
+                      "--repo", repo,
+                      "--color", label["color"],
+                      "--description", label.get("description", ""),
+                      "--force",
+                  ],
+                  check=True,
+              )
+          PY

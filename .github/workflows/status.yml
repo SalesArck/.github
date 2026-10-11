@@ -1,0 +1,77 @@
+name: Status
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    name: Check public surfaces
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Probe surfaces
+        id: probe
+        run: |
+          set -u
+          checked="$(date -u +"%Y-%m-%d %H:%M UTC")"
+          overall="up"
+          {
+            echo "# SalesArck status"
+            echo
+            echo "Checked ${checked} by [.github/workflows/status.yml](https://github.com/SalesArck/.github/actions/workflows/status.yml)."
+            echo
+            echo "| Surface | URL | Result |"
+            echo "|---|---|---|"
+          } > STATUS.md
+
+          check() {
+            local name="$1"
+            local url="$2"
+            local code
+            code="$(curl -sS -o /dev/null -w "%{http_code}" --max-time 25 -L "$url" || echo "000")"
+            local result
+            if [ "$code" = "200" ]; then
+              result="up (HTTP ${code})"
+            else
+              result="down (HTTP ${code})"
+              overall="down"
+            fi
+            echo "| ${name} | ${url} | ${result} |" >> STATUS.md
+          }
+
+          check "Marketing site" "https://salesarck.com"
+          check "Product" "https://loyalty.salesarck.com"
+          check "Documentation" "https://salesarck-documentation.pages.dev"
+          check "Production API" "https://salesarc-api-production.onrender.com/health"
+          check "Development API" "https://salesarck-api-development-fu9p.onrender.com/health"
+
+          {
+            echo
+            echo "\`dev-loyalty.salesarck.com\` does not resolve. The development web host is not part of this check."
+            echo
+            echo "Overall: **${overall}**"
+          } >> STATUS.md
+
+          echo "overall=${overall}" >> "$GITHUB_OUTPUT"
+
+      - name: Publish STATUS.md when it changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add STATUS.md
+          if git diff --cached --quiet; then
+            echo "Status unchanged."
+            exit 0
+          fi
+          git commit -m "chore: refresh status"
+          git push
+
+      - name: Fail when a surface is down
+        if: steps.probe.outputs.overall != 'up'
+        run: exit 1

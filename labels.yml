@@ -1,0 +1,75 @@
+# Shared label catalog for every SalesArck repository.
+# Applied by .github/workflows/sync-labels.yml in this repo,
+# and by `gh label create --force` when a repository is added.
+
+- name: bug
+  color: d73a4a
+  description: Something is broken
+
+- name: enhancement
+  color: a2eeef
+  description: A new capability
+
+- name: documentation
+  color: "0075ca"
+  description: Documentation only
+
+- name: question
+  color: d876e3
+  description: A question that needs an answer
+
+- name: "good first issue"
+  color: "7057ff"
+  description: A contained change for someone new to the repo
+
+- name: "help wanted"
+  color: "008672"
+  description: Extra attention is needed
+
+- name: "area: api"
+  color: 1d76db
+  description: API, jobs, and adapters
+
+- name: "area: web"
+  color: "5319e7"
+  description: Merchant and consumer portal
+
+- name: "area: website"
+  color: fbca04
+  description: salesarck.com
+
+- name: "area: docs"
+  color: "0075ca"
+  description: Documentation site
+
+- name: "area: pos"
+  color: e99695
+  description: Square, Clover, Toast, and Lighthouse
+
+- name: "area: wallet"
+  color: 0e8a16
+  description: Points, ledger, and redemption
+
+- name: "area: auth"
+  color: b60205
+  description: Sign-in, roles, and sessions
+
+- name: "area: infra"
+  color: "0052cc"
+  description: Deploy, environments, and secrets
+
+- name: "priority: critical"
+  color: b60205
+  description: Production is down or data is wrong
+
+- name: "priority: high"
+  color: d93f0b
+  description: Next in line
+
+- name: "priority: normal"
+  color: fbca04
+  description: Planned work
+
+- name: blocked
+  color: "000000"
+  description: Waiting on a decision or access
